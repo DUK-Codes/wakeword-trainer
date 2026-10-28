@@ -42,6 +42,7 @@ logs/
 # Keep bundled feature models and test fixtures
 !src/wakeword_trainer/models/
 !src/wakeword_trainer/models/**
+!src/wakeword_trainer/resources/models/
 !src/wakeword_trainer/resources/models/*.onnx
 !tests/fixtures/**/*.wav
 
