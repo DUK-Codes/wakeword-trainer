@@ -1,0 +1,112 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wakeword-trainer"
+version = "0.1.0"
+description = "Train custom openWakeWord-compatible wake word models on your own dataset from Python"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "wakeword-trainer contributors" }]
+keywords = ["wakeword", "openwakeword", "speech", "audio", "onnx", "training"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+dependencies = [
+  "numpy>=1.24,<3",
+  "scipy>=1.10,<2",
+  "soundfile>=0.12,<1",
+  "torch>=2.0,<3",
+  "onnxruntime>=1.16,<2",
+  "onnx>=1.14,<2",
+  "tqdm>=4.65,<5",
+  "requests>=2.28,<3",
+  "platformdirs>=3.10,<5",
+  "filelock>=3.12,<4",
+  "matplotlib>=3.7,<4",
+]
+
+[project.optional-dependencies]
+gui = [
+  "customtkinter>=5.2,<7",
+  "sounddevice>=0.4.6,<1",
+]
+tflite = [
+  "ai-edge-torch>=0.7,<1",
+]
+tts-piper = [
+  "piper-tts>=1.2,<2",
+]
+tts-coqui = [
+  "TTS>=0.22,<1",
+]
+tts-silero = [
+  "omegaconf>=2.3,<3",
+]
+dev = [
+  "pytest>=7,<9",
+  "pytest-cov>=5,<7",
+  "ruff>=0.6,<1",
+  "build>=1,<2",
+  "twine>=5,<7",
+  "pyinstaller>=6,<7",
+]
+all = [
+  "wakeword-trainer[gui,tflite,tts-piper,tts-coqui,tts-silero]",
+]
+
+[project.scripts]
+wakeword-trainer-gui = "wakeword_trainer.gui.app:main"
+
+[project.urls]
+Homepage = "https://github.com/DUK-Codes/wakeword-trainer"
+Documentation = "https://github.com/DUK-Codes/wakeword-trainer/tree/main/docs"
+Issues = "https://github.com/DUK-Codes/wakeword-trainer/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+wakeword_trainer = [
+  "resources/models/*.onnx",
+  "resources/*.json",
+  "tts/templates/*.py",
+  "tts/catalog/*.json",
+  "gui/assets/*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+markers = [
+  "slow: end-to-end tests that train a tiny model",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+exclude = ["build", "dist", "venv", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true

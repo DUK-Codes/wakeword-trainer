@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+*.whl
+*.tar.gz
+.venv/
+.venv-build/
+venv/
+env/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Project artifacts
+models/
+output/
+runs/
+reports/
+logs/
+*.onnx
+*.tflite
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+*.wav
+*.flac
+*.ogg
+*.mp3
+*.m4a
+
+# Keep bundled feature models and test fixtures
+!src/wakeword_trainer/models/
+!src/wakeword_trainer/models/**
+!src/wakeword_trainer/resources/models/*.onnx
+!tests/fixtures/**/*.wav
+
+# Personal dataset / experiment artifacts (never publish)
+sakura_samples*/
+sakura_model/
+train_files.txt
+test_files.txt
+*.cache
+
+# OS / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+src/wakeword_trainer/models/__pycache__/
+

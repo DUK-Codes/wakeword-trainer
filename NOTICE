@@ -1,0 +1,52 @@
+wakeword-trainer
+Copyright 2026 wakeword-trainer contributors
+
+This product includes software and models developed by third parties.
+
+--------------------------------------------------------------------------
+openWakeWord
+--------------------------------------------------------------------------
+Portions of the training recipe, model architecture, feature-extraction
+pipeline, and the bundled ONNX feature models are derived from or compatible
+with the openWakeWord project:
+
+    https://github.com/dscripka/openWakeWord
+    Copyright 2022 David Scripka
+    Licensed under the Apache License, Version 2.0
+
+The bundled files `melspectrogram.onnx` and `embedding_model.onnx` originate
+from the openWakeWord project and are redistributed unmodified under the
+terms of the Apache License, Version 2.0.
+
+--------------------------------------------------------------------------
+Google speech_embedding
+--------------------------------------------------------------------------
+The `embedding_model.onnx` implements the Google `speech_embedding` model
+(https://tfhub.dev/google/speech_embedding/1), and the melspectrogram model
+approximates its front-end. Both are distributed by Google under the
+Apache License, Version 2.0.
+
+--------------------------------------------------------------------------
+augmentations
+--------------------------------------------------------------------------
+Optional audio augmentation behaviour is inspired by the augmentation
+recipes used by openWakeWord, audiomentations and torch-audiomentations.
+No source code from those projects is vendored in this repository.
+
+--------------------------------------------------------------------------
+ACAV100M features
+--------------------------------------------------------------------------
+Pre-computed negative features are downloaded on demand from the
+openWakeWord feature dataset hosted by David Scripka on Hugging Face:
+
+    https://huggingface.co/datasets/davidscripka/openwakeword_features
+
+These files are not included in this repository or in published wheels.
+
+--------------------------------------------------------------------------
+Piper, Coqui XTTS, Silero TTS
+--------------------------------------------------------------------------
+TTS support is optional and is not bundled. Any TTS engine, voice model,
+or custom backend installed by the user remains subject to its own license
+terms. Users are responsible for complying with those terms, including any
+non-commercial or attribution requirements.
