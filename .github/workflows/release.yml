@@ -81,7 +81,7 @@ jobs:
   pypi:
     name: Publish to PyPI
     needs: dist
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -93,6 +93,9 @@ jobs:
           path: dist
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # Empty secret falls back to Trusted Publishing (OIDC).
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
   release:
     name: Create GitHub release

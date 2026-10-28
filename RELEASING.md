@@ -34,7 +34,23 @@ No API token is stored in the repository. Configure a pending publisher on PyPI:
 
 Create it at <https://pypi.org/manage/account/publishing/>. After the first successful release the publisher is attached to the project.
 
-If you prefer an API token instead, create a repository secret named `PYPI_API_TOKEN` and change the publish step to use `password: ${{ secrets.PYPI_API_TOKEN }}`.
+If you prefer an API token instead, create one at <https://pypi.org/manage/account/token/> and add it as a repository secret named `PYPI_API_TOKEN`:
+
+```powershell
+& "C:\Program Files\GitHub CLI\gh.exe" secret set PYPI_API_TOKEN --repo DUK-Codes/wakeword-trainer
+```
+
+Paste the token at the hidden prompt; never put it on the command line or in a file inside the repository. The release workflow uses the secret when it is present and falls back to Trusted Publishing when it is empty.
+
+The **first** token must be account-scoped (`Entire account`), because the project does not exist on PyPI yet. After the first successful upload, create a project-scoped token for `wakeword-trainer`, update the secret, and revoke the account-scoped token.
+
+To publish an already-built release manually:
+
+```powershell
+$env:TWINE_USERNAME = "__token__"
+$env:TWINE_PASSWORD = "pypi-..."   # paste at the prompt instead of saving it
+python -m twine upload dist/*
+```
 
 ## Local executable build
 
