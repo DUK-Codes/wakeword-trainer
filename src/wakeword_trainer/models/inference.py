@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import json
 import math
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
 
 import numpy as np
 import onnxruntime as ort
@@ -209,7 +209,11 @@ def load_model_metadata(path: str | Path) -> ModelMetadata:
         values[prop.key] = prop.value
     if not values:
         return ModelMetadata()
-    extra = {k: v for k, v in values.items() if k not in {"word", "threshold", "sample_rate", "clip_seconds", "frames", "version"}}
+    extra = {
+        k: v
+        for k, v in values.items()
+        if k not in {"word", "threshold", "sample_rate", "clip_seconds", "frames", "version"}
+    }
     try:
         frames = int(values.get("frames", 0)) or 0
     except ValueError:

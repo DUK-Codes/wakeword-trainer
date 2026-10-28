@@ -43,10 +43,13 @@ class TrainingRun:
 
     # ------------------------------------------------------------------
     def start(self) -> None:
-        command = [
-            sys.executable,
-            "-m",
-            "wakeword_trainer.gui.worker",
+        if getattr(sys, "frozen", False):
+            # The packaged executable contains the GUI and the worker; the
+            # ``--worker`` flag dispatches to the training entry point.
+            command = [sys.executable, "--worker"]
+        else:
+            command = [sys.executable, "-m", "wakeword_trainer.gui.worker"]
+        command += [
             "--config",
             str(self.config_path),
             "--events",
