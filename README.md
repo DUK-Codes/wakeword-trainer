@@ -13,6 +13,12 @@ pip install "wakeword-trainer[gui]"   # + desktop app and microphone support
 
 Python 3.10+. The feature models (mel + embedding) are bundled.
 
+If PyPI is unreachable, install from source:
+
+```bash
+pip install "wakeword-trainer[gui] @ git+https://github.com/DUK-Codes/wakeword-trainer.git"
+```
+
 ## Quick start
 
 ```python

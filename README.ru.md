@@ -13,6 +13,12 @@ pip install "wakeword-trainer[gui]"   # + приложение и работа �
 
 Python 3.10+. Модели признаков (mel + embedding) идут в комплекте.
 
+Если PyPI недоступен, установка из исходников:
+
+```bash
+pip install "wakeword-trainer[gui] @ git+https://github.com/DUK-Codes/wakeword-trainer.git"
+```
+
 ## Быстрый старт
 
 ```python
