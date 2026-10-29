@@ -18,6 +18,13 @@ Both delivery channels are produced by `.github/workflows/release.yml` from the 
 
 4. The workflow builds the package on Linux, builds the executable on Windows, publishes to PyPI, and creates the GitHub release with every artifact attached.
 
+## README rules
+
+`README.md` becomes the PyPI project description, so:
+
+- use **absolute** links for anything inside the repository (`README.ru.md`, `docs/*.md`, `LICENSE`, `NOTICE`) — PyPI resolves relative links against <https://pypi.org/project/wakeword-trainer/>, which produces 404s;
+- the description is part of the uploaded metadata, so a README-only fix still requires a version bump and a new release.
+
 `workflow_dispatch` builds the package and executable without publishing (the publish jobs only run for tags).
 
 ## One-time PyPI setup (trusted publishing)
