@@ -91,6 +91,15 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: Check credentials
+        env:
+          TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::notice::PYPI_API_TOKEN is empty - using Trusted Publishing (OIDC)."
+          else
+            echo "::notice::Publishing with PYPI_API_TOKEN."
+          fi
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
