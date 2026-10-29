@@ -1,13 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
-"""PyInstaller spec for the standalone Windows desktop app.
+"""PyInstaller spec for the Windows desktop application (one-folder build).
 
-Build with ``packaging/build_exe.ps1`` (Windows) or::
+Build with ``packaging/build_win.ps1`` (Windows) or::
 
     pyinstaller --clean --noconfirm packaging/wakeword_trainer.spec
 
-The executable bundles the library, the GUI and the ONNX feature models, but
-not PyPI/wheel metadata. Use a CPU-only PyTorch build to keep the file within
-GitHub's 2 GB release-asset limit.
+The output is ``dist/WakeWordTrainer/`` — the folder the installer deploys and
+the portable archive contains. Speech engines are *not* part of it: they are
+separate component archives (see ``build_components.ps1``) so the base download
+stays small. Use a CPU-only PyTorch build to stay within GitHub's 2 GB limit.
 """
 
 from pathlib import Path
@@ -30,6 +31,9 @@ datas.append(
 hiddenimports = [
     "wakeword_trainer.gui.worker",
     "wakeword_trainer.gui.app",
+    # Loaded through importlib in ``tts.registry``; PyInstaller cannot see them.
+    "wakeword_trainer.tts.piper",
+    "wakeword_trainer.tts.coqui",
     "matplotlib.backends.backend_tkagg",
     "onnxruntime",
     "onnxruntime.capi.onnxruntime_pybind11_state",
@@ -63,20 +67,28 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
     [],
-    name="wakeword-trainer",
+    exclude_binaries=True,
+    name="WakeWordTrainer",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    upx_exclude=[],
-    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=str(ROOT / "packaging" / "app.ico"),
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name="WakeWordTrainer",
 )

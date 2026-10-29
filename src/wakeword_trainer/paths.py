@@ -81,6 +81,11 @@ def config_dir() -> Path:
     return path
 
 
+def components_dir() -> Path:
+    """Folder with optional components; created on demand, may not exist."""
+    return Path(user_config_dir(APP_NAME, appauthor=False)) / "components"
+
+
 def ensure_dir(path: str | os.PathLike[str]) -> Path:
     """Create ``path`` (including parents) and return it as a :class:`Path`."""
     resolved = Path(path).expanduser()

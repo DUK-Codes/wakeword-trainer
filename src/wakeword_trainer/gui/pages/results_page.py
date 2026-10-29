@@ -34,7 +34,7 @@ class ResultsPage(BasePage):
         row = 0
 
         # ------------------------------------------------------------ header
-        self.header_card = Card(self)
+        self.header_card = Card(self, title=self.tr("results_title"))
         self.header_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.header_card.body
@@ -139,7 +139,7 @@ class ResultsPage(BasePage):
         self.curves_image.grid(row=0, column=1, sticky="nsew", padx=(6, 0))
 
         # ---------------------------------------------------------- warnings
-        self.warnings_card = Card(self)
+        self.warnings_card = Card(self, title=self.tr("results_warnings"))
         self.warnings_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         self.warnings_box = ctk.CTkTextbox(
@@ -154,7 +154,7 @@ class ResultsPage(BasePage):
         self.warnings_box.configure(state="disabled")
 
         # ----------------------------------------------------------- table
-        self.table_card = Card(self)
+        self.table_card = Card(self, title=self.tr("results_per_clip"))
         self.table_card.grid(row=row, column=0, sticky="ew")
         self.table_card.body.grid_columnconfigure(0, weight=1)
         self.table = LogBox(self.table_card.body, height=200)

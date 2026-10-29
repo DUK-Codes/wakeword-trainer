@@ -55,7 +55,7 @@ class SettingsPage(BasePage):
         row = 0
 
         # ---------------------------------------------------------- presets
-        self.preset_card = Card(self)
+        self.preset_card = Card(self, title=self.tr("preset"))
         self.preset_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.preset_card.body
@@ -80,7 +80,7 @@ class SettingsPage(BasePage):
         self.preset_desc.grid(row=3, column=0, sticky="w", pady=(8, 0))
 
         # ------------------------------------------------------------ model
-        self.model_card = Card(self)
+        self.model_card = Card(self, title=self.tr("settings_title"))
         self.model_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.model_card.body
@@ -111,7 +111,7 @@ class SettingsPage(BasePage):
         self.output_hint.grid(row=2, column=1, columnspan=2, sticky="w", pady=(4, 0))
 
         # --------------------------------------------------------- advanced
-        self.advanced_card = Card(self)
+        self.advanced_card = Card(self, title=self.tr("advanced"))
         self.advanced_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.advanced_card.body
@@ -147,14 +147,14 @@ class SettingsPage(BasePage):
         self.rir_row.set(self.app.gui_state.advanced.get("rir_dir", ""))
 
         # -------------------------------------------------------- negatives
-        self.negatives_card = Card(self)
+        self.negatives_card = Card(self, title=self.tr("negatives_source"))
         self.negatives_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.negatives_card.body
         body.grid_columnconfigure(1, weight=1)
 
         self.negatives_label = ctk.CTkLabel(
-            body, text=self.tr("negatives_source"), font=font(12, "bold"), text_color=COLOR_MUTED, anchor="w"
+            body, text=self.tr("negatives_mode_label"), font=font(12, "bold"), text_color=COLOR_MUTED, anchor="w"
         )
         self.negatives_label.grid(row=0, column=0, sticky="w", padx=(0, 12))
         self.negatives_mode = ctk.CTkOptionMenu(
@@ -216,7 +216,7 @@ class SettingsPage(BasePage):
         self.negatives_warning.grid(row=4, column=0, columnspan=2, sticky="w", pady=(8, 0))
 
         # ----------------------------------------------------------- export
-        self.export_card = Card(self)
+        self.export_card = Card(self, title=self.tr("results_export"))
         self.export_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.export_card.body
@@ -250,11 +250,6 @@ class SettingsPage(BasePage):
 
     # ------------------------------------------------------------------
     def _build_advanced(self, parent) -> None:
-        self.advanced_hint = ctk.CTkLabel(
-            parent, text=self.tr("advanced"), font=font(13, "bold"), text_color=COLOR_MUTED, anchor="w"
-        )
-        self.advanced_hint.grid(row=0, column=0, columnspan=4, sticky="w", pady=(0, 6))
-
         for index, (key, label_key, kind, caster) in enumerate(_NUMERIC_FIELDS):
             row = 1 + index // 3
             column = (index % 3) * 2
@@ -503,13 +498,12 @@ class SettingsPage(BasePage):
         self.output_label.configure(text=self.tr("output_dir"))
         self.output_hint.configure(text=self.tr("output_dir_hint"))
         self.advanced_card.set_title(self.tr("advanced"))
-        self.advanced_hint.configure(text=self.tr("advanced"))
         self.augment_label.configure(text=self.tr("augment_enabled"))
         self.augment_hint.configure(text=self.tr("augment_hint"))
         self.background_label.configure(text=self.tr("background_dir"))
         self.rir_label.configure(text=self.tr("rir_dir"))
         self.negatives_card.set_title(self.tr("negatives_source"))
-        self.negatives_label.configure(text=self.tr("negatives_source"))
+        self.negatives_label.configure(text=self.tr("negatives_mode_label"))
         self.negatives_path_label.configure(text=self.tr("negatives_path"))
         self.negatives_browse.configure(text=self.tr("browse"))
         self.download_check.configure(text=self.tr("negatives_download"))

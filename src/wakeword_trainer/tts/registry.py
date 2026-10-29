@@ -1,7 +1,7 @@
 """Backend discovery, user plugins and a small convenience API.
 
 Built-in backends are imported lazily, so installing the base package never
-pulls in Piper/Coqui/Silero. User backends are plain ``.py`` files inside the
+pulls in Piper or Coqui. User backends are plain ``.py`` files inside the
 plugin directory; each file may expose a ``TTSBackend`` subclass through a
 module-level ``BACKEND`` object or class.
 
@@ -27,7 +27,6 @@ from .base import SynthesisResult, TTSBackend, VoiceInfo
 _BUILTIN = {
     "piper": ("wakeword_trainer.tts.piper", "PiperBackend"),
     "coqui": ("wakeword_trainer.tts.coqui", "CoquiBackend"),
-    "silero": ("wakeword_trainer.tts.silero", "SileroBackend"),
 }
 
 _TEMPLATE_PATH = Path(__file__).resolve().parent / "templates" / "custom_backend.py"
@@ -194,7 +193,16 @@ def get_backend(name: str | TTSBackend) -> TTSBackend:
     module_name, class_name = _BUILTIN[key]
     import importlib
 
-    module = importlib.import_module(module_name)
+    try:
+        module = importlib.import_module(module_name)
+    except ModuleNotFoundError as exc:
+        missing = exc.name or ""
+        if missing.startswith("wakeword_trainer"):
+            raise TTSError(
+                f"The {key!r} backend module is missing from this build ({missing}). "
+                "Reinstall the application or install the package with pip."
+            ) from exc
+        raise TTSError(f"Backend {key!r} is not installed: the {missing!r} package is missing.") from exc
     backend = getattr(module, class_name)()
     _instances[key] = backend
     return backend

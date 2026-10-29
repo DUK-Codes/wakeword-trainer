@@ -23,7 +23,9 @@ The interface switches between **Русский** and **English** from the top b
 - Pick the folder with your wake word recordings. The app scans it recursively and shows:
   - number of valid/invalid files, total duration, sample rates, channels;
   - groups and duplicate pairs;
-  - warnings (short clips, silence, too few files, inconsistent formats).
+  - warnings (short clips, silence, too few files, inconsistent formats) — the
+    **Checks** card appears after the first validation and stays hidden while the
+    folder has not been scanned.
 - **Record from the microphone** directly into the dataset folder:
   1. choose the input device (or use the system default);
   2. press **Start recording**, say the phrase, press **Stop and save**;
@@ -88,7 +90,9 @@ This uses the same `StreamingDetector` and `WakeWordDetector` as the Python API,
 
 ## 6. Speech (TTS)
 
-Optional page for generating extra positive samples:
+Optional page for generating extra positive samples. The desktop build ships
+**without** engines: the page lists them and, when one is missing, shows an
+**Install engine…** button that jumps to the **Components** page.
 
 - lists installed backends and whether they are available;
 - shows the voice catalog (language, size, license);
@@ -98,6 +102,23 @@ Optional page for generating extra positive samples:
 - **Open plugin folder** / **Create plugin template** manage custom backends.
 
 None of this is required for training — it is a convenience for bootstrapping a dataset.
+
+## 7. Components
+
+The page for everything that is not part of the base build:
+
+- **Speech engine** — Piper with size, status and an
+  **Install**/**Remove** button. Engines installed with the setup are managed by
+  Windows and cannot be removed here.
+- **Training negatives** — download the validation set (~185 MB) or ACAV100M
+  (~17 GB, asks for confirmation) before starting a long run.
+- **Feature models** — confirms the bundled `melspectrogram.onnx` and
+  `embedding_model.onnx` are present.
+- **Data folders** — open the cache/downloads folder, the components/plugins
+  folder, or create a TTS plugin template.
+
+Downloads show a progress bar and keep the interface responsive. See
+[components.md](components.md) for the folder layout and manual installation.
 
 ---
 

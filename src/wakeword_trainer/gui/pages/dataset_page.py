@@ -28,7 +28,8 @@ class DatasetPage(BasePage):
         row = 0
 
         # ---------------------------------------------------------- folder
-        self.folder_card = Card(self)
+        # No card title here: the page header already says "Dataset".
+        self.folder_card = Card(self, subtitle=self.tr("dataset_hint"))
         self.folder_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.folder_card.body
@@ -54,17 +55,6 @@ class DatasetPage(BasePage):
             command=self.validate,
         )
         self.validate_button.pack(side="left")
-        self.refresh_button = ctk.CTkButton(
-            self.actions,
-            text=self.tr("dataset_refresh"),
-            font=font(13),
-            height=36,
-            width=150,
-            fg_color="#333a46",
-            hover_color="#3d4552",
-            command=self.validate,
-        )
-        self.refresh_button.pack(side="left", padx=(8, 0))
 
         self.status_label = ctk.CTkLabel(self.actions, text="", font=font(12), text_color=COLOR_MUTED, anchor="w")
         self.status_label.pack(side="left", padx=(12, 0))
@@ -86,12 +76,13 @@ class DatasetPage(BasePage):
             widget.grid(row=0, column=column, sticky="ew", padx=(0 if column == 0 else 8, 0))
 
         # -------------------------------------------------------- warnings
-        self.warnings_card = Card(self)
+        self.warnings_card = Card(self, title=self.tr("dataset_warnings"))
         self.warnings_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
+        self.warnings_card.grid_remove()
         row += 1
         self.warnings_box = ctk.CTkTextbox(
             self.warnings_card.body,
-            height=120,
+            height=96,
             font=font(12),
             fg_color="#12141a",
             text_color=COLOR_WARN,
@@ -101,7 +92,9 @@ class DatasetPage(BasePage):
         self.warnings_box.configure(state="disabled")
 
         # ------------------------------------------------------- recording
-        self.record_card = Card(self)
+        self.record_card = Card(
+            self, title=self.tr("dataset_record_title"), subtitle=self.tr("dataset_record_hint")
+        )
         self.record_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.record_card.body
@@ -152,7 +145,7 @@ class DatasetPage(BasePage):
         )
         self.record_status.pack(side="left", padx=(12, 0))
 
-        self.log_card = Card(self)
+        self.log_card = Card(self, title=self.tr("train_log"))
         self.log_card.grid(row=row, column=0, sticky="ew")
         self.log_card.body.grid_columnconfigure(0, weight=1)
         self.log = LogBox(self.log_card.body, height=120)
@@ -265,6 +258,7 @@ class DatasetPage(BasePage):
             for warning in warnings:
                 self.warnings_box.insert("end", f"• {warning}\n")
         self.warnings_box.configure(state="disabled")
+        self.warnings_card.grid()
 
         for path, reason in summary.get("rejected", [])[:20]:
             self.log.append(f"{path} — {reason}")
@@ -354,9 +348,9 @@ class DatasetPage(BasePage):
             self.discard_recording()
 
     def retranslate(self) -> None:
-        self.folder_card.set_title(self.tr("dataset_title"), self.tr("dataset_hint"))
+        self.folder_card.set_title("", self.tr("dataset_hint"))
+        self.warnings_card.set_title(self.tr("dataset_warnings"))
         self.validate_button.configure(text=self.tr("dataset_check"))
-        self.refresh_button.configure(text=self.tr("dataset_refresh"))
         self.metric_files.set_caption(self.tr("dataset_valid"))
         self.metric_groups.set_caption(self.tr("dataset_groups"))
         self.metric_duration.set_caption(self.tr("dataset_duration"))

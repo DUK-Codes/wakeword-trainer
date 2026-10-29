@@ -68,7 +68,8 @@ class CoquiBackend(TTSBackend):
         if self.available():
             return None
         return (
-            "Coqui TTS is not installed. Run `pip install wakeword-trainer[tts-coqui]`.\n"
+            "Coqui TTS is not part of the desktop application. Install it with "
+            "`pip install wakeword-trainer[tts-coqui]` and start the app from Python.\n"
             "Note: XTTS weights are non-commercial; check the CPML before publishing generated audio."
         )
 

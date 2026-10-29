@@ -18,6 +18,7 @@ separate functions; see :mod:`wakeword_trainer.api`.
 
 from __future__ import annotations
 
+from . import components
 from .api import (
     PRESETS,
     WakeWordTrainer,
@@ -67,8 +68,12 @@ from .training.callbacks import Callback, CancelToken, TrainingEvent
 from .training.trainer import Trainer, TrainingResult
 from .version import __version__
 
+# Optional components (speech engines) add their own folders to ``sys.path``.
+components.activate()
+
 __all__ = [
     "__version__",
+    "components",
     # high level
     "WakeWordTrainer",
     "train",

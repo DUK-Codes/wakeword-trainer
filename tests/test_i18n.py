@@ -57,3 +57,12 @@ def test_core_translation_keys_used_by_the_gui_exist():
             if key not in STRINGS:
                 missing.setdefault(key, set()).add(path.name)
     assert not missing, f"missing translation keys: {missing}"
+
+
+def test_dynamic_component_strings_exist_for_every_engine():
+    from wakeword_trainer.components import COMPONENTS
+
+    for component in COMPONENTS.values():
+        for suffix in ("title", "desc"):
+            key = f"components_{component.engine}_{suffix}"
+            assert key in STRINGS, f"missing translation key: {key}"

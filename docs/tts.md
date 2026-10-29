@@ -2,7 +2,8 @@
 
 Text-to-speech is **optional and not bundled**. It is useful for bootstrapping a dataset, covering phrases you cannot record easily, or adding voice variety — but synthetic samples are not a replacement for real recordings from the target microphone.
 
-No TTS dependency is imported unless you use the corresponding backend.
+No TTS dependency is imported unless you use the corresponding backend. All
+engines run on your machine; only voice models are downloaded.
 
 ---
 
@@ -10,15 +11,32 @@ No TTS dependency is imported unless you use the corresponding backend.
 
 | Backend | Extra | Notes |
 | --- | --- | --- |
-| `piper` | `tts-piper` | Fast, local, many languages; uses the `piper` CLI if installed, otherwise the Python API |
+| `piper` | `tts-piper` | Fast CPU synthesis, many languages; uses the `piper` CLI if installed, otherwise the Python API |
 | `coqui` | `tts-coqui` | Coqui TTS / XTTS; heavier, supports voice cloning |
-| `silero` | `tts-silero` | Silero models; downloads model files on first use |
 
 Install what you need:
 
 ```bash
 pip install "wakeword-trainer[gui,tts-piper]"
 ```
+
+### In the desktop application
+
+The Windows build does not include any engine. There are two ways to add one:
+
+1. tick **Piper** in the setup wizard;
+2. open **Components → Speech engines** and press **Install** (≈33 MB).
+
+Coqui is not shipped as a component because its dependencies and models are very
+large; install the Python package and start the app from that environment:
+
+```bash
+pip install "wakeword-trainer[gui,tts-coqui]"
+wakeword-trainer-gui
+```
+
+The Speech page always shows what is actually importable and links to the
+Components page when an engine is missing.
 
 Check what is available:
 

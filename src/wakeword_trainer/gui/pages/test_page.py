@@ -36,7 +36,7 @@ class TestPage(BasePage):
         row = 0
 
         # ------------------------------------------------------------ model
-        self.model_card = Card(self)
+        self.model_card = Card(self, title=self.tr("test_title"), subtitle=self.tr("test_hint"))
         self.model_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.model_card.body
@@ -78,7 +78,7 @@ class TestPage(BasePage):
         self.info_label.grid(row=2, column=1, sticky="w", pady=(6, 0))
 
         # ------------------------------------------------------------- mic
-        self.mic_card = Card(self)
+        self.mic_card = Card(self, title=self.tr("test_title"))
         self.mic_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.mic_card.body
@@ -131,7 +131,7 @@ class TestPage(BasePage):
         self.hits_label.pack(side="left", padx=(14, 0))
 
         # ------------------------------------------------------------ file
-        self.file_card = Card(self)
+        self.file_card = Card(self, title=self.tr("test_file"))
         self.file_card.grid(row=row, column=0, sticky="ew")
         row += 1
         body = self.file_card.body

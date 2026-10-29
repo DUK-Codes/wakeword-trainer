@@ -14,9 +14,13 @@ pip install wakeword-trainer          # библиотека
 pip install "wakeword-trainer[gui]"   # + приложение и работа с микрофоном
 ```
 
-Python 3.10+. Модели признаков (mel + embedding) идут в комплекте.
+Python 3.10+. Модели признаков (mel + embedding) входят в пакет.
 
-Если не хотите ставить Python — скачайте `wakeword-trainer-<версия>-windows-x64.exe` из [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases/latest).
+Если не хотите ставить Python — скачайте установщик
+`wakeword-trainer-<версия>-windows-x64-setup.exe` (или портативный
+`...-portable.zip`) из [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases/latest).
+В установщике можно отметить движок озвучки (Piper); по умолчанию он не ставится,
+и его можно добавить позже на странице **«Компоненты»**.
 
 Если PyPI недоступен, установка из исходников:
 
@@ -68,7 +72,21 @@ wakeword-trainer-gui
 
 Проверка датасета, запись с микрофона, прогресс и графики обучения, метрики на отложенной выборке, проверка на живом микрофоне, TTS-примеры, экспорт ONNX/TFLite — в одном окне, RU/EN.
 
-Готовый Windows `.exe` (Python не нужен) прикреплён к [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases). Сама библиотека распространяется отдельно через pip.
+Всё работает на вашей машине: модели признаков идут в комплекте, обучение выполняет PyTorch, а датасеты, модели и голоса остаются в выбранных вами папках. Аккаунт и API-ключ не нужны.
+
+Готовый установщик и портативный архив для Windows (Python не нужен) прикреплены к [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases). Сама библиотека распространяется отдельно через pip.
+
+### Дополнительные компоненты
+
+Базовая сборка намеренно компактная, остальное добавляется по необходимости:
+
+- **Движок озвучки** (Piper) — галочка в установщике или кнопка на странице
+  **«Компоненты»**; Coqui XTTS доступен только вместе с Python-пакетом.
+- **Негативы для обучения** — скачиваются автоматически при обучении или заранее
+  на той же странице (валидационный набор ~185 МБ, ACAV100M ~17 ГБ).
+- **Голоса** — загружаются со страницы «Озвучка», когда понадобятся.
+
+Подробнее: [docs/components.md](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/components.md).
 
 ## Что внутри
 
@@ -86,12 +104,13 @@ wakeword-trainer-gui
 
 | | |
 | --- | --- |
-| [Установка](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/installation.md) | extras, ffmpeg, кэши |
+| [Установка](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/installation.md) | extras, установщик, ffmpeg, кэши |
 | [Python API](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/python-api.md) | все функции, конфиг, колбэки |
 | [GUI](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/gui.md) | постраничный обзор |
+| [Компоненты](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/components.md) | движки, голоса, негативы |
 | [Датасет](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/dataset.md) | запись, группы, сплиты |
 | [Негативы](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/negatives.md) | auto / `.npy` / папка аудио |
-| [TTS](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/tts.md) | Piper, Coqui, Silero, плагины |
+| [TTS](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/tts.md) | Piper, Coqui, плагины |
 | [Экспорт](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/export.md) | контракт ONNX, интеграция с openWakeWord |
 | [Решение проблем](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/troubleshooting.md) | частые ошибки |
 | [Архитектура](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/architecture.md) | модули и конвейер |

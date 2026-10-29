@@ -61,5 +61,10 @@ desktop.ini
 .vscode/
 *.swp
 
+# Local agent notes (not published)
+PROJECT.md
+
 src/wakeword_trainer/models/__pycache__/
 
+# Local verification screenshots (not published)
+screenshots/

@@ -44,7 +44,7 @@ openWakeWord feature dataset hosted by David Scripka on Hugging Face:
 These files are not included in this repository or in published wheels.
 
 --------------------------------------------------------------------------
-Piper, Coqui XTTS, Silero TTS
+Piper and Coqui XTTS
 --------------------------------------------------------------------------
 TTS support is optional and is not bundled. Any TTS engine, voice model,
 or custom backend installed by the user remains subject to its own license

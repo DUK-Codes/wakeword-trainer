@@ -163,6 +163,46 @@ Cancellation is cooperative: the worker checks between steps. If it does not res
 
 ---
 
+## Speech and components
+
+**The Speech page says "engine is not installed" (`No module named 'wakeword_trainer.tts.piper'`)**
+
+The desktop build has no engines by default. Open **Components → Speech engines**
+and press **Install** (or tick the engine in the setup wizard), then revisit the
+Speech page — it reloads the backend list when shown. From a Python environment
+use `pip install "wakeword-trainer[tts-piper]"`.
+
+**An installed engine is not detected**
+
+- make sure it was installed for the same application (the installer writes
+  `<app>\components`, the Components page writes
+  `%APPDATA%\wakeword-trainer\components`);
+- restart the application after a manual copy;
+- for a portable unzip, check that the `components` folder is next to
+  `WakeWordTrainer.exe`, or point `WAKEWORD_TRAINER_COMPONENTS_DIR` at it.
+
+**The Components page cannot download anything**
+
+Downloads go to `github.com/.../releases/latest/download`. Behind a proxy or
+offline, download `component-tts-piper.zip` on
+another machine and install them with `wakeword_trainer.components.install_archive()`.
+Negative features and voices can be copied into the cache folder instead — see
+[components.md](components.md).
+
+**Coqui XTTS is missing**
+
+By design: its dependencies and models are too large for a component. Install the
+Python package (`pip install "wakeword-trainer[gui,tts-coqui]"`) and start the app
+from that environment.
+
+**A voice download is slow or fails**
+
+Voices are ~63 MB each and resume from a `.part` file. Run the download again; if
+it repeatedly fails, fetch the `.onnx` and `.onnx.json` files manually into
+`<cache>\tts\piper\<voice>.onnx`.
+
+---
+
 ## Cache and disk
 
 **How do I free space?**

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import threading
+import traceback
 from pathlib import Path
 
 import customtkinter as ctk
@@ -34,7 +35,7 @@ class TTSPage(BasePage):
         row = 0
 
         # --------------------------------------------------------- settings
-        self.setup_card = Card(self)
+        self.setup_card = Card(self, title=self.tr("tts_title"), subtitle=self.tr("tts_hint"))
         self.setup_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.setup_card.body
@@ -69,9 +70,21 @@ class TTSPage(BasePage):
         self.voice_menu.grid(row=1, column=1, columnspan=3, sticky="ew", pady=(10, 0))
 
         self.backend_info = ctk.CTkLabel(
-            body, text="", font=font(11), text_color=COLOR_MUTED, anchor="w", justify="left", wraplength=780
+            body, text="", font=font(11), text_color=COLOR_MUTED, anchor="w", justify="left", wraplength=600
         )
-        self.backend_info.grid(row=2, column=0, columnspan=4, sticky="w", pady=(8, 0))
+        self.backend_info.grid(row=2, column=0, columnspan=3, sticky="w", pady=(8, 0))
+        self.install_engine_button = ctk.CTkButton(
+            body,
+            text=self.tr("tts_install_engine"),
+            font=font(12),
+            height=30,
+            width=160,
+            fg_color="#333a46",
+            hover_color="#3d4552",
+            command=lambda: self.app.open_page("components"),
+        )
+        self.install_engine_button.grid(row=2, column=3, sticky="e", pady=(8, 0))
+        self.install_engine_button.grid_remove()
 
         self.license_label = ctk.CTkLabel(
             body, text=self.tr("tts_license_note"), font=font(11), text_color=COLOR_WARN, anchor="w"
@@ -79,7 +92,7 @@ class TTSPage(BasePage):
         self.license_label.grid(row=3, column=0, columnspan=4, sticky="w", pady=(4, 0))
 
         # ------------------------------------------------------------- text
-        self.text_card = Card(self)
+        self.text_card = Card(self, title=self.tr("tts_text"))
         self.text_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.text_card.body
@@ -118,7 +131,7 @@ class TTSPage(BasePage):
         self.status.pack(side="left", padx=(12, 0))
 
         # ---------------------------------------------------------- plugins
-        self.plugin_card = Card(self)
+        self.plugin_card = Card(self, title=self.tr("tts_plugins_title"))
         self.plugin_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.plugin_card.body
@@ -165,7 +178,7 @@ class TTSPage(BasePage):
         self.plugin_errors_label.grid(row=1, column=0, sticky="w", pady=(6, 0))
 
         # --------------------------------------------------------------- log
-        self.log_card = Card(self)
+        self.log_card = Card(self, title=self.tr("train_log"))
         self.log_card.grid(row=row, column=0, sticky="ew")
         self.log_card.body.grid_columnconfigure(0, weight=1)
         self.log = LogBox(self.log_card.body, height=140)
@@ -199,9 +212,7 @@ class TTSPage(BasePage):
                 # Prefer an installed backend.
                 preferred = next((name for name in labels if infos[name]["available"]), labels[0])
                 self.backend_menu.set(preferred)
-                self._on_backend(preferred)
-            else:
-                self._refresh_voices()
+            self._on_backend(self.backend_menu.get())
         else:
             self.backend_menu.configure(values=["—"])
             self.backend_menu.set("—")
@@ -223,11 +234,13 @@ class TTSPage(BasePage):
                 text=(info.get("description") or "") + "\n" + (info.get("license") or ""),
                 text_color=COLOR_MUTED,
             )
+            self.install_engine_button.grid_remove()
         else:
-            self.backend_info.configure(
-                text=self.tr("tts_not_installed", error=info.get("error") or ""),
-                text_color=COLOR_WARN,
-            )
+            text = self.tr(f"tts_missing_{name}")
+            if text == f"tts_missing_{name}":
+                text = self.tr("tts_not_installed", error=info.get("error") or "")
+            self.backend_info.configure(text=text, text_color=COLOR_WARN)
+            self.install_engine_button.grid()
         self._refresh_voices()
 
     def _on_language(self, label: str) -> None:
@@ -367,6 +380,9 @@ class TTSPage(BasePage):
                 state["results"] = results
             except Exception as exc:  # noqa: BLE001
                 state["error"] = exc
+                # The desktop build has no console; the traceback goes to the
+                # log file set up by ``runtime.ensure_std_streams``.
+                traceback.print_exc()
             finally:
                 state["finished"] = True
 
@@ -396,8 +412,8 @@ class TTSPage(BasePage):
 
     # ------------------------------------------------------------------
     def on_show(self) -> None:
-        if not self._backend_names:
-            self.reload_backends()
+        # Pick up engines installed on the Components tab since the last visit.
+        self.reload_backends()
 
     def retranslate(self) -> None:
         self.setup_card.set_title(self.tr("tts_title"), self.tr("tts_hint"))
@@ -408,7 +424,7 @@ class TTSPage(BasePage):
         self.text_card.set_title(self.tr("tts_text"))
         self.download_button.configure(text=self.tr("tts_download"))
         self.generate_button.configure(text=self.tr("tts_generate"))
-        self.plugin_card.set_title(self.tr("tts_title"))
+        self.plugin_card.set_title(self.tr("tts_plugins_title"))
         self.plugin_open.configure(text=self.tr("tts_install_plugins"))
         self.plugin_template.configure(text=self.tr("tts_install_template"))
         self.log_card.set_title(self.tr("train_log"))

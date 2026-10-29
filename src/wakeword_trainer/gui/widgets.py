@@ -58,40 +58,53 @@ class Card(ctk.CTkFrame):
         self._row = 0
 
         self.header = ctk.CTkFrame(self, fg_color="transparent")
-        self.header.grid(row=0, column=0, sticky="ew", padx=16, pady=(14, 0))
         self.header.grid_columnconfigure(0, weight=1)
 
         self.title_label = ctk.CTkLabel(
             self.header,
-            text=title,
+            text="",
             font=font(15, "bold"),
             text_color=COLOR_TEXT,
             anchor="w",
         )
-        self.title_label.grid(row=0, column=0, sticky="w")
         self.subtitle_label = ctk.CTkLabel(
             self.header,
-            text=subtitle,
+            text="",
             font=font(12),
             text_color=COLOR_MUTED,
             anchor="w",
             justify="left",
             wraplength=760,
         )
-        if subtitle:
-            self.subtitle_label.grid(row=1, column=0, sticky="w", pady=(2, 0))
 
         self.body = ctk.CTkFrame(self, fg_color="transparent")
         self.body.grid(row=1, column=0, sticky="nsew", padx=16, pady=(10, 14))
         self.body.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
+        self.set_title(title, subtitle)
+
     def set_title(self, title: str, subtitle: str | None = None) -> None:
+        """Set the header; the header row disappears when both parts are empty."""
+        subtitle = self.subtitle_label.cget("text") if subtitle is None else subtitle
         self.title_label.configure(text=title)
-        if subtitle is not None:
-            self.subtitle_label.configure(text=subtitle)
-            if subtitle and not self.subtitle_label.winfo_ismapped():
-                self.subtitle_label.grid(row=1, column=0, sticky="w", pady=(2, 0))
+        self.subtitle_label.configure(text=subtitle)
+
+        if title:
+            self.title_label.grid(row=0, column=0, sticky="w")
+        else:
+            self.title_label.grid_remove()
+        if subtitle:
+            self.subtitle_label.grid(row=1 if title else 0, column=0, sticky="w", pady=(2, 0) if title else 0)
+        else:
+            self.subtitle_label.grid_remove()
+
+        if title or subtitle:
+            self.header.grid(row=0, column=0, sticky="ew", padx=16, pady=(14, 0))
+            self.body.grid_configure(pady=(10, 14))
+        else:
+            self.header.grid_remove()
+            self.body.grid_configure(pady=(14, 14))
 
     def add(self, widget, **grid_kwargs) -> None:
         self._row += 1

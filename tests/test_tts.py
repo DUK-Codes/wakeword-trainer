@@ -27,8 +27,8 @@ def clean_registry():
 
 def test_builtin_backends_are_listed(clean_registry):
     infos = registry.list_backends()
-    assert {"piper", "coqui", "silero"} <= set(infos)
-    for name in ("piper", "coqui", "silero"):
+    assert {"piper", "coqui"} <= set(infos)
+    for name in ("piper", "coqui"):
         info = infos[name]
         assert info["builtin"] is True
         assert isinstance(info["available"], bool)
@@ -78,7 +78,7 @@ def test_broken_plugin_is_reported_without_breaking_others(clean_registry):
     assert "broken.py" in errors
     assert "boom" in errors["broken.py"]
     # Built-ins are still listed.
-    assert {"piper", "coqui", "silero"} <= set(registry.list_backends())
+    assert {"piper", "coqui"} <= set(registry.list_backends())
 
 
 def test_unknown_backend_raises(clean_registry):

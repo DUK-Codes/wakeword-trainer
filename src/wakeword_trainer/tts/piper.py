@@ -47,7 +47,10 @@ class PiperBackend(TTSBackend):
     def availability_error(self) -> str | None:
         if self.available():
             return None
-        return "Piper is not installed. Run `pip install wakeword-trainer[tts-piper]` or install `piper-tts` manually."
+        return (
+            "Piper is not installed. Add the Piper engine under Components, "
+            "or run `pip install wakeword-trainer[tts-piper]`."
+        )
 
     def voices(self) -> list[VoiceInfo]:
         catalog = _catalog()
@@ -173,29 +176,40 @@ class PiperBackend(TTSBackend):
             from piper import PiperVoice
         except Exception as exc:  # noqa: BLE001
             raise TTSError(
-                f"Piper is installed but neither the `piper` executable nor the Python API could be used: {exc}"
+                "Piper is installed but neither the `piper` executable nor the Python API could be used: "
+                f"{exc}"
             ) from exc
 
         try:
             import wave
 
-            voice = PiperVoice.load(
-                str(model_path),
-                config_path=str(config_path) if config_path.is_file() else None,
-            )
-            with wave.open(str(output), "wb") as handle:
-                voice.synthesize(text, handle)
-        except TypeError:
-            # Older piper releases return raw PCM instead of writing to a wave handle.
-            voice = PiperVoice.load(str(model_path))  # type: ignore[call-arg]
-            chunks = list(voice.synthesize_stream_raw(text))  # type: ignore[attr-defined]
-            data = b"".join(chunks)
-            import wave
+            try:
+                voice = PiperVoice.load(
+                    str(model_path),
+                    config_path=str(config_path) if config_path.is_file() else None,
+                )
+            except TypeError:
+                # Older releases only accept the model path.
+                voice = PiperVoice.load(str(model_path))  # type: ignore[call-arg]
 
+            if hasattr(voice, "synthesize_wav"):
+                # piper-tts >= 1.3 writes a complete wave file.
+                with wave.open(str(output), "wb") as handle:
+                    voice.synthesize_wav(text, handle)
+                return
+
+            chunks = list(voice.synthesize(text))  # type: ignore[attr-defined]
+            if chunks and hasattr(chunks[0], "audio_int16_bytes"):
+                data = b"".join(chunk.audio_int16_bytes() for chunk in chunks)
+                sample_rate = int(getattr(getattr(voice, "config", None), "sample_rate", 22_050))
+            else:
+                # piper-tts 1.2 returns raw PCM through a separate helper.
+                data = b"".join(voice.synthesize_stream_raw(text))  # type: ignore[attr-defined]
+                sample_rate = 22_050
             with wave.open(str(output), "wb") as handle:
                 handle.setnchannels(1)
                 handle.setsampwidth(2)
-                handle.setframerate(22050)
+                handle.setframerate(sample_rate)
                 handle.writeframes(data)
         except Exception as exc:  # noqa: BLE001
             raise TTSError(f"Piper synthesis failed: {exc}") from exc

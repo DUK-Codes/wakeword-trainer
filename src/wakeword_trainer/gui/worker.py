@@ -22,6 +22,7 @@ from pathlib import Path
 
 from ..config import TrainerConfig
 from ..exceptions import TrainingCancelled, WakeWordTrainerError
+from ..runtime import ensure_std_streams
 from ..training.callbacks import Callback, CancelToken, JSONLWriter, TrainingEvent
 from ..training.trainer import Trainer
 
@@ -56,6 +57,8 @@ def _write_error(events_path: Path, message: str, details: str = "") -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Runs inside the same windowed executable as the GUI, which has no stdio.
+    ensure_std_streams()
     parser = argparse.ArgumentParser(description="wakeword-trainer background worker")
     parser.add_argument("--config", required=True, help="TrainerConfig JSON file")
     parser.add_argument("--events", required=True, help="JSONL event output file")

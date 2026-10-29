@@ -29,6 +29,7 @@ STRINGS: dict[str, dict[str, str]] = {
     "nav_results": {"ru": "Результаты", "en": "Results"},
     "nav_test": {"ru": "Проверка", "en": "Test"},
     "nav_tts": {"ru": "Озвучка (TTS)", "en": "Speech (TTS)"},
+    "nav_components": {"ru": "Компоненты", "en": "Components"},
     "language": {"ru": "Язык", "en": "Language"},
     "open_output": {"ru": "Открыть папку", "en": "Open folder"},
     "ready": {"ru": "Готово", "en": "Ready"},
@@ -44,7 +45,7 @@ STRINGS: dict[str, dict[str, str]] = {
     "copy": {"ru": "Копировать", "en": "Copy"},
     "copied": {"ru": "Скопировано", "en": "Copied"},
     # --------------------------------------------------------------- dataset
-    "dataset_title": {"ru": "Датасет", "en": "Dataset"},
+    "dataset_warnings": {"ru": "Проверки", "en": "Checks"},
     "dataset_hint": {
         "ru": "Папка с записями вашего wake word. Поддерживаются WAV, FLAC, OGG; MP3/M4A — при наличии ffmpeg.",
         "en": "Folder with your wake word recordings. WAV, FLAC and OGG are supported; MP3/M4A need ffmpeg.",
@@ -87,7 +88,6 @@ STRINGS: dict[str, dict[str, str]] = {
     "record_level": {"ru": "Уровень", "en": "Level"},
     "record_device": {"ru": "Устройство ввода", "en": "Input device"},
     "record_default_device": {"ru": "По умолчанию", "en": "System default"},
-    "dataset_refresh": {"ru": "Повторить проверку", "en": "Refresh check"},
     # -------------------------------------------------------------- settings
     "settings_title": {"ru": "Настройки обучения", "en": "Training settings"},
     "settings_hint": {
@@ -135,6 +135,7 @@ STRINGS: dict[str, dict[str, str]] = {
     "background_dir": {"ru": "Папка с фоновыми шумами", "en": "Background noise folder"},
     "rir_dir": {"ru": "Папка с RIR (реверберация)", "en": "RIR folder (reverb)"},
     "negatives_source": {"ru": "Негативы (не-wake-word данные)", "en": "Negatives (non-wake-word data)"},
+    "negatives_mode_label": {"ru": "Способ", "en": "Mode"},
     "negatives_auto": {"ru": "ACAV100M (Hugging Face)", "en": "ACAV100M (Hugging Face)"},
     "negatives_npy": {"ru": "Файл признаков .npy", "en": "Feature file (.npy)"},
     "negatives_audio": {"ru": "Папка с аудио", "en": "Audio folder"},
@@ -266,8 +267,8 @@ STRINGS: dict[str, dict[str, str]] = {
     # -------------------------------------------------------------------- tts
     "tts_title": {"ru": "Синтез примеров (TTS)", "en": "Synthesize samples (TTS)"},
     "tts_hint": {
-        "ru": "Дополнительные примеры из синтезированной речи. TTS-движки не входят в пакет и устанавливаются отдельно.",
-        "en": "Extra samples from synthesized speech. TTS engines are not bundled and must be installed separately.",
+        "ru": "Дополнительные примеры из синтезированной речи. Движки добавляются на вкладке «Компоненты».",
+        "en": "Extra samples from synthesized speech. Engines are added on the Components tab.",
     },
     "tts_backend": {"ru": "Движок", "en": "Engine"},
     "tts_voice": {"ru": "Голос", "en": "Voice"},
@@ -282,6 +283,16 @@ STRINGS: dict[str, dict[str, str]] = {
     "tts_not_installed": {
         "ru": "Движок не установлен: {error}",
         "en": "Engine is not installed: {error}",
+    },
+    "tts_install_engine": {"ru": "Установить движок…", "en": "Install engine…"},
+    "tts_plugins_title": {"ru": "Свои движки (плагины)", "en": "Custom engines (plugins)"},
+    "tts_missing_piper": {
+        "ru": "Движок Piper не установлен. Добавьте его на вкладке «Компоненты» или установите пакет wakeword-trainer[tts-piper].",
+        "en": "The Piper engine is not installed. Add it on the Components tab or install wakeword-trainer[tts-piper].",
+    },
+    "tts_missing_coqui": {
+        "ru": "Coqui XTTS недоступен в десктопной сборке. Установите пакет wakeword-trainer[tts-coqui] и запустите приложение из Python.",
+        "en": "Coqui XTTS is not part of the desktop build. Install wakeword-trainer[tts-coqui] and start the app from Python.",
     },
     "tts_install_plugins": {"ru": "Открыть папку плагинов", "en": "Open plugin folder"},
     "tts_install_template": {"ru": "Создать шаблон плагина", "en": "Create plugin template"},
@@ -300,6 +311,63 @@ STRINGS: dict[str, dict[str, str]] = {
     "tts_license_note": {
         "ru": "Проверьте лицензию голоса и движка перед публикацией сгенерированных данных.",
         "en": "Check the voice and engine license before publishing generated audio.",
+    },
+    # ------------------------------------------------------------ components
+    "components_engines_title": {"ru": "Движок озвучки", "en": "Speech engine"},
+    "components_engines_hint": {
+        "ru": "Установщик его не включает: добавьте движок здесь или при установке приложения.",
+        "en": "Not included in the setup by default; add the engine here or when installing the app.",
+    },
+    "components_install": {"ru": "Установить", "en": "Install"},
+    "components_remove": {"ru": "Удалить", "en": "Remove"},
+    "components_installed": {"ru": "Установлено", "en": "Installed"},
+    "components_not_installed": {"ru": "Не установлено", "en": "Not installed"},
+    "components_installing": {"ru": "Устанавливаем…", "en": "Installing…"},
+    "components_downloading": {"ru": "Скачиваем…", "en": "Downloading…"},
+    "components_engine_ready": {"ru": "Движок доступен на вкладке «Озвучка».", "en": "The engine is available on the Speech tab."},
+    "components_engine_failed": {"ru": "Не удалось установить: {error}", "en": "Could not install: {error}"},
+    "components_removed": {"ru": "Компонент удалён.", "en": "Component removed."},
+    "components_piper_title": {"ru": "Piper", "en": "Piper"},
+    "components_piper_desc": {
+        "ru": "Быстрый синтез речи для русского, английского и других языков. Голоса скачиваются отдельно.",
+        "en": "Fast speech synthesis for Russian, English and more. Voices are downloaded separately.",
+    },
+    "components_coqui_note": {
+        "ru": "Coqui XTTS в десктопной сборке недоступен: он ставится только вместе с Python-пакетом.",
+        "en": "Coqui XTTS is not part of the desktop build; install it with the Python package instead.",
+    },
+    "components_negatives_title": {"ru": "Негативы для обучения", "en": "Training negatives"},
+    "components_negatives_hint": {
+        "ru": "Скачиваются автоматически при обучении, если включена загрузка негативов. Можно подготовить заранее.",
+        "en": "Downloaded automatically during training when negative download is enabled. You can prepare them now.",
+    },
+    "components_neg_validation": {"ru": "Негативы для валидации", "en": "Validation negatives"},
+    "components_neg_acav": {"ru": "ACAV100M (фоновые записи)", "en": "ACAV100M (background audio)"},
+    "components_present": {"ru": "Скачано", "en": "Downloaded"},
+    "components_missing": {"ru": "Не скачано", "en": "Not downloaded"},
+    "components_download": {"ru": "Скачать", "en": "Download"},
+    "components_acav_confirm_title": {"ru": "ACAV100M", "en": "ACAV100M"},
+    "components_acav_confirm": {
+        "ru": "Архив занимает около 17 ГБ на диске и скачивается долго. Продолжить?",
+        "en": "The archive takes about 17 GB on disk and takes a while to download. Continue?",
+    },
+    "components_acav_done": {"ru": "Готово: {path}", "en": "Done: {path}"},
+    "components_models_title": {"ru": "Модели признаков", "en": "Feature models"},
+    "components_models_ok": {
+        "ru": "melspectrogram.onnx и embedding_model.onnx уже входят в приложение.",
+        "en": "melspectrogram.onnx and embedding_model.onnx are bundled with the application.",
+    },
+    "components_paths_title": {"ru": "Папки с данными", "en": "Data folders"},
+    "components_paths_hint": {
+        "ru": "Здесь хранятся скачанные голоса, негативы и плагины. Записи датасета остаются там, где вы их выбрали.",
+        "en": "Downloaded voices, negatives and plugins live here. Dataset recordings stay where you put them.",
+    },
+    "components_cache_dir": {"ru": "Кэш и загрузки", "en": "Cache and downloads"},
+    "components_config_dir": {"ru": "Компоненты и плагины", "en": "Components and plugins"},
+    "components_open": {"ru": "Открыть", "en": "Open"},
+    "components_busy": {
+        "ru": "Дождитесь окончания текущей операции.",
+        "en": "Wait for the current operation to finish.",
     },
 }
 

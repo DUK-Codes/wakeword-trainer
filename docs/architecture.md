@@ -45,6 +45,7 @@ The project is deliberately layered: a small public API on top of pipeline modul
 | `export/onnx.py` | ONNX export, metadata, runtime verification |
 | `export/tflite.py` | Optional best-effort TFLite conversion |
 | `tts/*` | Optional backends, registry, plugin loader, voice catalog |
+| `components.py` | Optional engine components: roots, install/remove, `sys.path` activation |
 | `gui/*` | CustomTkinter app, pages, worker subprocess, JSONL event tailing |
 
 ## Feature pipeline and parity
@@ -93,7 +94,7 @@ python -m wakeword_trainer.gui.worker --config config.json --events events.jsonl
 
 as a **separate process**, writes events as JSONL, and tails the file. This keeps Tk responsive during heavy training and lets the GUI cancel through a marker file, with `terminate()` as a last resort. The worker writes `error`/`cancelled` events and a meaningful exit code.
 
-The GUI itself is a `CTk` window with lazily built pages (`dataset`, `settings`, `train`, `results`, `test`, `tts`). Each page implements `build`, `retranslate`, `on_show`/`on_hide` where needed. `GuiState` persists paths and options to `gui_state.json`.
+The GUI itself is a `CTk` window with lazily built pages (`dataset`, `settings`, `train`, `results`, `test`, `tts`, `components`). Each page implements `build`, `retranslate`, `on_show`/`on_hide` where needed. `GuiState` persists paths and options to `gui_state.json`.
 
 ## Caches
 

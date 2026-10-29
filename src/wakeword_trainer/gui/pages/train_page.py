@@ -36,7 +36,7 @@ class TrainPage(BasePage):
         row = 0
 
         # -------------------------------------------------------- controls
-        self.control_card = Card(self)
+        self.control_card = Card(self, title=self.tr("train_title"))
         self.control_card.grid(row=row, column=0, sticky="ew", pady=(0, 12))
         row += 1
         body = self.control_card.body
@@ -107,7 +107,7 @@ class TrainPage(BasePage):
         row += 1
 
         # ------------------------------------------------------------- log
-        self.log_card = Card(self)
+        self.log_card = Card(self, title=self.tr("train_log"))
         self.log_card.grid(row=row, column=0, sticky="ew")
         self.log_card.body.grid_columnconfigure(0, weight=1)
         self.log = LogBox(self.log_card.body, height=200)

@@ -10,8 +10,10 @@ from typing import Any
 
 import customtkinter as ctk
 
+from ..runtime import ensure_std_streams
 from ..version import __version__
 from .i18n import LANGUAGE_NAMES, Translator
+from .pages.components_page import ComponentsPage
 from .pages.dataset_page import DatasetPage
 from .pages.results_page import ResultsPage
 from .pages.settings_page import SettingsPage
@@ -50,7 +52,11 @@ class WakeWordTrainerApp(ctk.CTk):
         self.geometry("1180x820")
         self.minsize(1020, 700)
         self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(0, weight=1)
+        # Only the page area grows; header and status bar keep their height so
+        # the content is not pushed towards the middle of the window.
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=0)
 
         self._build_sidebar()
         self._build_header()
@@ -66,7 +72,7 @@ class WakeWordTrainerApp(ctk.CTk):
         self.sidebar = ctk.CTkFrame(self, fg_color=COLOR_SIDEBAR, corner_radius=0, width=232)
         self.sidebar.grid(row=0, column=0, rowspan=3, sticky="nsw")
         self.sidebar.grid_propagate(False)
-        self.sidebar.grid_rowconfigure(8, weight=1)
+        self.sidebar.grid_rowconfigure(9, weight=1)
 
         self.brand = ctk.CTkLabel(
             self.sidebar,
@@ -76,7 +82,7 @@ class WakeWordTrainerApp(ctk.CTk):
             anchor="w",
             justify="left",
         )
-        self.brand.grid(row=0, column=0, sticky="w", padx=20, pady=(24, 2))
+        self.brand.grid(row=0, column=0, sticky="w", padx=20, pady=(20, 2))
         self.brand_sub = ctk.CTkLabel(
             self.sidebar,
             text=self.tr("app_subtitle"),
@@ -86,7 +92,7 @@ class WakeWordTrainerApp(ctk.CTk):
             justify="left",
             wraplength=190,
         )
-        self.brand_sub.grid(row=1, column=0, sticky="w", padx=20, pady=(0, 22))
+        self.brand_sub.grid(row=1, column=0, sticky="w", padx=20, pady=(0, 16))
 
         self.nav_buttons: dict[str, ctk.CTkButton] = {}
         items = [
@@ -96,6 +102,7 @@ class WakeWordTrainerApp(ctk.CTk):
             ("results", "nav_results"),
             ("test", "nav_test"),
             ("tts", "nav_tts"),
+            ("components", "nav_components"),
         ]
         for offset, (key, label_key) in enumerate(items):
             button = ctk.CTkButton(
@@ -114,10 +121,10 @@ class WakeWordTrainerApp(ctk.CTk):
             self.nav_buttons[key] = button
 
         self.sidebar_spacer = ctk.CTkFrame(self.sidebar, fg_color="transparent")
-        self.sidebar_spacer.grid(row=8, column=0, sticky="nsew")
+        self.sidebar_spacer.grid(row=9, column=0, sticky="nsew")
 
         self.language_frame = ctk.CTkFrame(self.sidebar, fg_color="transparent")
-        self.language_frame.grid(row=9, column=0, sticky="ew", padx=14, pady=(0, 8))
+        self.language_frame.grid(row=10, column=0, sticky="ew", padx=14, pady=(0, 8))
         self.language_label = ctk.CTkLabel(
             self.language_frame,
             text=self.tr("language"),
@@ -143,7 +150,7 @@ class WakeWordTrainerApp(ctk.CTk):
             text_color="#5f6775",
             anchor="w",
         )
-        self.version_label.grid(row=10, column=0, sticky="w", padx=20, pady=(0, 14))
+        self.version_label.grid(row=11, column=0, sticky="w", padx=20, pady=(0, 14))
 
     def _build_header(self) -> None:
         self.header = ctk.CTkFrame(self, fg_color="transparent", height=54)
@@ -178,6 +185,7 @@ class WakeWordTrainerApp(ctk.CTk):
             "results": ResultsPage(self.container, self),
             "test": TestPage(self.container, self),
             "tts": TTSPage(self.container, self),
+            "components": ComponentsPage(self.container, self),
         }
         self.dataset_page = self.pages["dataset"]
         self.settings_page = self.pages["settings"]
@@ -185,6 +193,7 @@ class WakeWordTrainerApp(ctk.CTk):
         self.results_page = self.pages["results"]
         self.test_page = self.pages["test"]
         self.tts_page = self.pages["tts"]
+        self.components_page = self.pages["components"]
         for page in self.pages.values():
             page.grid(row=0, column=0, sticky="nsew")
             page.grid_remove()
@@ -222,6 +231,10 @@ class WakeWordTrainerApp(ctk.CTk):
             page.on_show()
         except Exception as exc:  # noqa: BLE001
             self.show_error(self.tr("error"), str(exc))
+
+    def open_page(self, key: str) -> None:
+        """Navigate to a page from another page (e.g. "install an engine")."""
+        self._show_page(key)
 
     def _on_language(self, label: str) -> None:
         language = "en" if label == LANGUAGE_NAMES["en"] else "ru"
@@ -360,14 +373,23 @@ class WakeWordTrainerApp(ctk.CTk):
 def main() -> None:
     import sys
 
+    # The windowed executable starts without stdio and libraries such as
+    # ``torch.hub`` write progress output; give them a real stream first.
+    ensure_std_streams()
     state = GuiState.load()
-    # ``--lang`` is a convenience for shortcuts, not a scripting interface.
+    # ``--lang`` and ``--page`` are conveniences for shortcuts and support
+    # screenshots, not a scripting interface.
+    page: str | None = None
     for index, argument in enumerate(sys.argv):
         if argument == "--lang" and index + 1 < len(sys.argv):
             language = sys.argv[index + 1].lower()
             if language in {"ru", "en"}:
                 state.language = language
+        elif argument == "--page" and index + 1 < len(sys.argv):
+            page = sys.argv[index + 1].strip().lower()
     app = WakeWordTrainerApp(state)
+    if page and page in app.pages:
+        app.open_page(page)
     app.mainloop()
 
 
