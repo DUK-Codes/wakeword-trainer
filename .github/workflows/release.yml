@@ -85,7 +85,9 @@ jobs:
       - name: Verify build outputs
         shell: pwsh
         run: |
-          $version = python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['version'])"
+          $version = python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])"
+          if (-not $version) { throw "could not read the project version from pyproject.toml" }
+          Write-Host "project version: $version"
           $required = @(
             "dist/WakeWordTrainer/WakeWordTrainer.exe",
             "dist/wakeword-trainer-$version-windows-x64-setup.exe",
@@ -140,6 +142,9 @@ jobs:
         with:
           # Empty secret falls back to Trusted Publishing (OIDC).
           password: ${{ secrets.PYPI_API_TOKEN }}
+          # A re-run of an already published tag must not fail: PyPI rejects
+          # duplicate filenames, and the files are byte-identical anyway.
+          skip-existing: true
 
   release:
     name: Create GitHub release
