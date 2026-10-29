@@ -2,7 +2,7 @@
 
 Обучение **совместимых с openWakeWord** моделей wake word на собственных записях — из Python-скрипта или десктопного приложения. Самостоятельный проект: без зависимости от `openwakeword` и оригинальных ноутбуков.
 
-[English version](README.md)
+[English version](https://github.com/DUK-Codes/wakeword-trainer/blob/main/README.md)
 
 [![PyPI](https://img.shields.io/badge/PyPI-wakeword--trainer-blue)](https://pypi.org/project/wakeword-trainer/)
 [![Release](https://img.shields.io/github/v/release/DUK-Codes/wakeword-trainer)](https://github.com/DUK-Codes/wakeword-trainer/releases/latest)
@@ -86,15 +86,15 @@ wakeword-trainer-gui
 
 | | |
 | --- | --- |
-| [Установка](docs/installation.md) | extras, ffmpeg, кэши |
-| [Python API](docs/python-api.md) | все функции, конфиг, колбэки |
-| [GUI](docs/gui.md) | постраничный обзор |
-| [Датасет](docs/dataset.md) | запись, группы, сплиты |
-| [Негативы](docs/negatives.md) | auto / `.npy` / папка аудио |
-| [TTS](docs/tts.md) | Piper, Coqui, Silero, плагины |
-| [Экспорт](docs/export.md) | контракт ONNX, интеграция с openWakeWord |
-| [Решение проблем](docs/troubleshooting.md) | частые ошибки |
-| [Архитектура](docs/architecture.md) | модули и конвейер |
+| [Установка](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/installation.md) | extras, ffmpeg, кэши |
+| [Python API](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/python-api.md) | все функции, конфиг, колбэки |
+| [GUI](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/gui.md) | постраничный обзор |
+| [Датасет](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/dataset.md) | запись, группы, сплиты |
+| [Негативы](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/negatives.md) | auto / `.npy` / папка аудио |
+| [TTS](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/tts.md) | Piper, Coqui, Silero, плагины |
+| [Экспорт](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/export.md) | контракт ONNX, интеграция с openWakeWord |
+| [Решение проблем](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/troubleshooting.md) | частые ошибки |
+| [Архитектура](https://github.com/DUK-Codes/wakeword-trainer/blob/main/docs/architecture.md) | модули и конвейер |
 
 ## Разработка
 
@@ -107,4 +107,4 @@ ruff check src tests && pytest -q
 
 ## Лицензия
 
-Apache-2.0 — см. [LICENSE](LICENSE) и [NOTICE](NOTICE).
+Apache-2.0 — см. [LICENSE](https://github.com/DUK-Codes/wakeword-trainer/blob/main/LICENSE) и [NOTICE](https://github.com/DUK-Codes/wakeword-trainer/blob/main/NOTICE).
