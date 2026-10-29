@@ -4,6 +4,9 @@ Train **openWakeWord-compatible** wake word models on your own recordings — fr
 
 [Русская версия](README.ru.md)
 
+[![PyPI](https://img.shields.io/badge/PyPI-wakeword--trainer-blue)](https://pypi.org/project/wakeword-trainer/)
+[![Release](https://img.shields.io/github/v/release/DUK-Codes/wakeword-trainer)](https://github.com/DUK-Codes/wakeword-trainer/releases/latest)
+
 ## Install
 
 ```bash
@@ -12,6 +15,8 @@ pip install "wakeword-trainer[gui]"   # + desktop app and microphone support
 ```
 
 Python 3.10+. The feature models (mel + embedding) are bundled.
+
+Prefer no Python at all? Download `wakeword-trainer-<version>-windows-x64.exe` from [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases/latest).
 
 If PyPI is unreachable, install from source:
 

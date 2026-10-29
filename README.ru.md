@@ -4,6 +4,9 @@
 
 [English version](README.md)
 
+[![PyPI](https://img.shields.io/badge/PyPI-wakeword--trainer-blue)](https://pypi.org/project/wakeword-trainer/)
+[![Release](https://img.shields.io/github/v/release/DUK-Codes/wakeword-trainer)](https://github.com/DUK-Codes/wakeword-trainer/releases/latest)
+
 ## Установка
 
 ```bash
@@ -12,6 +15,8 @@ pip install "wakeword-trainer[gui]"   # + приложение и работа �
 ```
 
 Python 3.10+. Модели признаков (mel + embedding) идут в комплекте.
+
+Если не хотите ставить Python — скачайте `wakeword-trainer-<версия>-windows-x64.exe` из [Releases](https://github.com/DUK-Codes/wakeword-trainer/releases/latest).
 
 Если PyPI недоступен, установка из исходников:
 
