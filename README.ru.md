@@ -4,6 +4,9 @@
 
 [English version](https://github.com/DUK-Codes/wakeword-trainer/blob/main/README.md)
 
+Телеграм контакт: @DUK_Creativity
+Есть вопросы? Пишите мне!
+
 [![PyPI](https://img.shields.io/badge/PyPI-wakeword--trainer-blue)](https://pypi.org/project/wakeword-trainer/)
 [![Release](https://img.shields.io/github/v/release/DUK-Codes/wakeword-trainer)](https://github.com/DUK-Codes/wakeword-trainer/releases/latest)
 
