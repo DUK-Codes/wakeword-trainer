@@ -4,6 +4,9 @@ Train **openWakeWord-compatible** wake word models on your own recordings — fr
 
 [Русская версия](https://github.com/DUK-Codes/wakeword-trainer/blob/main/README.ru.md)
 
+Telegram contact: @DUK_Creativity
+Have a question? Message me.
+
 [![PyPI](https://img.shields.io/badge/PyPI-wakeword--trainer-blue)](https://pypi.org/project/wakeword-trainer/)
 [![Release](https://img.shields.io/github/v/release/DUK-Codes/wakeword-trainer)](https://github.com/DUK-Codes/wakeword-trainer/releases/latest)
 
